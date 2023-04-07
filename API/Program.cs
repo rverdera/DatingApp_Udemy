@@ -1,5 +1,11 @@
 using API.Data;
+using API.Extensions;
+using API.Interfaces;
+using API.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace API
 {
@@ -10,12 +16,13 @@ namespace API
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddDbContext<DataContext>(opt =>
-            {
-                opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
-            });
-
             builder.Services.AddControllers();
+
+            builder.Services.AddApplicationServices(builder.Configuration);
+           
+
+           
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -29,10 +36,13 @@ namespace API
                 app.UseSwaggerUI();
             }
 
+            app.UseCors("DatingApp");
+            
             app.UseHttpsRedirection();
 
-            app.UseAuthorization();
+            app.UseAuthentication();
 
+            app.UseAuthorization();
 
             app.MapControllers();
 
