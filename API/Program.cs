@@ -19,6 +19,7 @@ namespace API
             builder.Services.AddControllers();
 
             builder.Services.AddApplicationServices(builder.Configuration);
+            builder.Services.AddIdentityServices(builder.Configuration);
            
 
            
